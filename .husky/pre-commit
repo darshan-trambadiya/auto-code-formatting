@@ -1,0 +1,11 @@
+# Get list of staged files
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | awk '{print $0}')
+
+# Format Prettier files
+echo "$STAGED_FILES" | grep -E '\.(ts|css|less|scss|js)$' | xargs -r prettier --config .prettierrc --write
+
+# Format HTML files
+echo "$STAGED_FILES" | grep -E '\.html$' | xargs -r js-beautify --config .jsbeautifyrc --type html --replace
+
+# Add changes
+git add -u
